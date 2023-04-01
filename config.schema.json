@@ -1,7 +1,7 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
-  "pluginType": "platform",
-  "singular": true,
+  "pluginAlias": "BroadLonkSPPlugin",
+  "pluginType": "accessory",
+  "singular": false,
   "schema": {
     "type": "object",
     "properties": {
@@ -9,7 +9,13 @@
         "title": "Name",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "placeholder": "Example Dynamic Platform"
+      },
+      "ip": {
+        "title": "ip",
+        "type": "string",
+        "required": true,
+        "placeholder": "192.168.0.0"
       }
     }
   }
