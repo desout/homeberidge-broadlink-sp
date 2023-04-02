@@ -71,6 +71,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
    */
   async discoverDevices() {
     const devices = await broadlink.discover();
+    this.log.info('test:', devices, devices.map(device => device.constructor.name.toLowerCase()));
     devices.forEach((device) => {
       switch (device.constructor.name.toLowerCase()) {
         case 'sp4b': {
