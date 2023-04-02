@@ -7,3 +7,6 @@ export const PLATFORM_NAME = 'BroadLonkSPPlugin';
  * This must match the name of your plugin as defined the package.json
  */
 export const PLUGIN_NAME = 'homebridge-broadlink-sp';
+
+export const DEFAULT_ADDRESS = '0.0.0.0';
+export const DEFAULT_BROADCAST_ADDRESS = '255.255.255.255';

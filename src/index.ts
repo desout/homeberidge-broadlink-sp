@@ -1,11 +1,11 @@
 import { API } from 'homebridge';
 
 import { PLATFORM_NAME } from './settings';
-import {ExampleSwitch} from './Accessory';
+import { BroadlinkHomebridgePlatform } from './platform';
 
 /**
  * This method registers the platform with Homebridge
  */
 export = (api: API) => {
-  api.registerAccessory(PLATFORM_NAME, ExampleSwitch);
+  api.registerPlatform(PLATFORM_NAME, BroadlinkHomebridgePlatform);
 };
