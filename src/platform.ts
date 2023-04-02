@@ -70,7 +70,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
    * must not be registered again to prevent "duplicate UUID" errors.
    */
   async discoverDevices() {
-    const devices = await broadlink.discover();
+    const devices = await broadlink.discover(undefined, {address: this.address, broadcastAddress: this.broadcastAddress});
     this.log.info('test:', devices, devices.map(device => device.constructor.name.toLowerCase()));
     devices.forEach((device) => {
       switch (device.constructor.name.toLowerCase()) {
