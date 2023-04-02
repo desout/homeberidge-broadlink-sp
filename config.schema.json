@@ -1,6 +1,6 @@
 {
-  "pluginAlias": "BroadLonkSPPlugin",
-  "pluginType": "accessory",
+  "pluginAlias": "BroadLinkSPPlugin",
+  "pluginType": "platform",
   "singular": false,
   "schema": {
     "type": "object",
@@ -9,7 +9,8 @@
         "title": "Name",
         "type": "string",
         "required": true,
-        "placeholder": "Example Dynamic Platform"
+        "default": "Broadlink",
+        "placeholder": "Platform Name"
       },
       "address": {
         "title": "Address",

@@ -1,4 +1,13 @@
-import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
+import {
+  API,
+  DynamicPlatformPlugin,
+  Logger,
+  PlatformAccessory,
+  PlatformConfig,
+  Service,
+  Characteristic,
+  APIEvent,
+} from 'homebridge';
 
 import {DEFAULT_ADDRESS, DEFAULT_BROADCAST_ADDRESS, PLATFORM_NAME, PLUGIN_NAME} from './settings';
 import * as broadlink from 'node-broadlink';
@@ -37,7 +46,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
     // Dynamic Platform plugins should only register new accessories after this event was fired,
     // in order to ensure they weren't added to homebridge already. This event can also be used
     // to start discovery of new accessories.
-    this.api.on('didFinishLaunching', () => {
+    this.api.on(APIEvent.DID_FINISH_LAUNCHING, () => {
       log.debug('Executed didFinishLaunching callback');
       // run the method to discover / register your devices as accessories
       this.discoverDevices();
