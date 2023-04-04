@@ -1,7 +1,6 @@
 import {Service, PlatformAccessory, CharacteristicValue, AccessoryPlugin} from 'homebridge';
 
 import { BroadlinkHomebridgePlatform } from './platform';
-import {Sp4b} from 'node-broadlink';
 
 /**
  * Platform Accessory
@@ -10,16 +9,16 @@ import {Sp4b} from 'node-broadlink';
  */
 export class PlugAccessory implements AccessoryPlugin {
   private service: Service;
-  private readonly plug: Sp4b;
+  states = {
+    on: false,
+  };
 
   constructor(
     private readonly platform: BroadlinkHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
     private readonly manufacturer: string,
     private readonly model: string,
-    private readonly _plug: Sp4b,
   ) {
-    this.plug = _plug;
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, manufacturer)
@@ -47,7 +46,7 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async setOn(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    await this.plug.setPower(value as boolean);
+    this.states.on = this.accessory.context.device.setState('pwr', value as boolean);
 
     this.platform.log.debug('Set Characteristic On ->', value);
   }
@@ -67,7 +66,7 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async getOn(): Promise<CharacteristicValue> {
     // implement your own code to check if the device is on
-    const isOn = (await this.plug.getState()).pwr;
+    const isOn = await this.accessory.context.device.getState('pwr');
 
     this.platform.log.debug('Get Characteristic On ->', isOn);
 

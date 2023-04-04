@@ -93,7 +93,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               existingAccessory.displayName,
             );
 
-            new PlugAccessory(this, existingAccessory, manufacturer, model, plug);
+            new PlugAccessory(this, existingAccessory, manufacturer, model);
           } else {
             this.log.info(
               'registering new accessory:',
@@ -104,7 +104,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               uuid,
             );
 
-            new PlugAccessory(this, accessory, manufacturer, model, plug );
+            new PlugAccessory(this, accessory, manufacturer, model );
 
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
               accessory,
