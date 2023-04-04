@@ -96,7 +96,7 @@ export class PlugAccessory implements AccessoryPlugin {
   async getDevice(): Promise<Sp4b> {
     const { host } = this.accessory.context;
     this.platform.log.debug('host', host);
-    const devices = await broadlink.discover();
+    const devices = await broadlink.discover(undefined, {address: '0.0.0.0', broadcastAddress: '255.255.255.255'});
     this.platform.log.debug('devices', devices);
     const plug = devices.find(d => d.host.address === host.address) as Sp4b;
     this.platform.log.debug('plug', plug);
