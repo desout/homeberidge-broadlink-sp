@@ -93,8 +93,8 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               'Restoring existing accessory from cache:',
               existingAccessory.displayName,
             );
-            existingAccessory.context.device = device;
-            new PlugAccessory(this, existingAccessory, manufacturer, model);
+
+            new PlugAccessory(this, existingAccessory, manufacturer, model, plug);
           } else {
             this.log.info(
               'registering new accessory:',
@@ -105,8 +105,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               uuid,
             );
 
-            accessory.context.device = device;
-            new PlugAccessory(this, accessory, manufacturer, model );
+            new PlugAccessory(this, accessory, manufacturer, model, plug );
 
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
               accessory,
