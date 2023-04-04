@@ -79,7 +79,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
           const {mac, name, manufacturer, model} = plug;
 
 
-          plug.auth();
+          await plug.auth();
 
           const uuid = this.api.hap.uuid.generate(mac.join('.'));
           const existingAccessory = this.accessories.find(
