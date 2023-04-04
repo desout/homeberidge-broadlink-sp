@@ -1,8 +1,15 @@
-import {Service, PlatformAccessory, CharacteristicValue, AccessoryPlugin} from 'homebridge';
+import {AccessoryPlugin, CharacteristicValue, PlatformAccessory, Service} from 'homebridge';
 
-import { BroadlinkHomebridgePlatform } from './platform';
+import {BroadlinkHomebridgePlatform} from './platform';
 import {Sp4b} from 'node-broadlink';
-
+interface Sp4State<T = boolean> {
+  pwr: T;
+  ntlight: T;
+  indicator: T;
+  ntlbrightness: number;
+  maxworktime: number;
+  childlock: T;
+}
 /**
  * Platform Accessory
  * An instance of this class is created for each accessory your platform registers
@@ -11,15 +18,17 @@ import {Sp4b} from 'node-broadlink';
 export class PlugAccessory implements AccessoryPlugin {
   private service: Service;
   private readonly plug: Sp4b;
-
+  private state: Sp4State;
   constructor(
     private readonly platform: BroadlinkHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
     private readonly manufacturer: string,
     private readonly model: string,
     private readonly _plug: Sp4b,
+    private readonly _state:Sp4State,
   ) {
     this.plug = _plug;
+    this.state = _state;
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, manufacturer)
@@ -47,7 +56,7 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async setOn(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    await this.accessory.context.device.setState('pwr', value as boolean);
+    await this.plug.setState({...this.state, pwr: value as boolean});
 
     this.platform.log.debug('Set Characteristic On ->', value);
   }
@@ -67,14 +76,13 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async getOn(): Promise<CharacteristicValue> {
     // implement your own code to check if the device is on
-    const isOn = (await this.plug.getState()).pwr;
-
-    this.platform.log.debug('Get Characteristic On ->', isOn);
+    this.state = (await this.plug.getState());
+    this.platform.log.debug('Get Characteristic On ->', this.state.pwr);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
 
-    return isOn;
+    return this.state.pwr;
   }
 
   /*

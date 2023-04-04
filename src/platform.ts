@@ -72,7 +72,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
   async discoverDevices() {
     const devices = await broadlink.discover(undefined, {address: this.address, broadcastAddress: this.broadcastAddress});
     this.log.info('test:', devices, devices.map(device => device.constructor.name.toLowerCase()));
-    devices.forEach((device) => {
+    for (const device of devices) {
       switch (device.constructor.name.toLowerCase()) {
         case 'sp4b': {
           const plug = device as Sp4b;
@@ -92,8 +92,8 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               'Restoring existing accessory from cache:',
               existingAccessory.displayName,
             );
-
-            new PlugAccessory(this, existingAccessory, manufacturer, model, plug);
+            const state = await plug.getState();
+            new PlugAccessory(this, existingAccessory, manufacturer, model, plug, state);
           } else {
             this.log.info(
               'registering new accessory:',
@@ -104,7 +104,8 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               uuid,
             );
 
-            new PlugAccessory(this, accessory, manufacturer, model, plug );
+            const state = await plug.getState();
+            new PlugAccessory(this, accessory, manufacturer, model, plug, state);
 
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
               accessory,
@@ -113,6 +114,6 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
           }
         }
       }
-    });
+    }
   }
 }
