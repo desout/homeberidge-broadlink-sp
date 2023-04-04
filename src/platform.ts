@@ -103,7 +103,7 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               name,
               uuid,
             );
-
+            accessory.context.host = device.host;
             const state = await plug.getState();
             new PlugAccessory(this, accessory, manufacturer, model, plug, state);
 

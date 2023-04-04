@@ -1,4 +1,5 @@
 import {AccessoryPlugin, CharacteristicValue, PlatformAccessory, Service} from 'homebridge';
+import * as broadlink from 'node-broadlink';
 
 import {BroadlinkHomebridgePlatform} from './platform';
 import {Sp4b} from 'node-broadlink';
@@ -56,7 +57,8 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async setOn(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    await this.plug.setState({...this.state, pwr: value as boolean});
+    const plug = await this.getDevice();
+    await plug.setPower(value as boolean);
 
     this.platform.log.debug('Set Characteristic On ->', value);
   }
@@ -76,13 +78,16 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async getOn(): Promise<CharacteristicValue> {
     // implement your own code to check if the device is on
-    this.state = (await this.plug.getState());
-    this.platform.log.debug('Get Characteristic On ->', this.state.pwr);
+    // implement your own code to turn your device on/off
+    const plug = await this.getDevice();
+    const power = await plug.checkPower();
+
+    this.platform.log.debug('Get Characteristic On ->', power);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
 
-    return this.state.pwr;
+    return power;
   }
 
   /*
@@ -93,5 +98,16 @@ export class PlugAccessory implements AccessoryPlugin {
     return [
       this.service,
     ];
+  }
+
+  /*
+  * This method is called directly after creation of this instance.
+  * It should return all services which should be added to the accessory.
+  */
+  async getDevice(): Promise<Sp4b> {
+    const { host } = this.accessory.context.device;
+    const devices = await broadlink.discover();
+    const plug = devices.find(d => d.host.address === host.address) as Sp4b;
+    return (await plug.auth()) as Sp4b;
   }
 }
