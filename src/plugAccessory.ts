@@ -3,14 +3,6 @@ import * as broadlink from 'node-broadlink';
 
 import {BroadlinkHomebridgePlatform} from './platform';
 import {Sp4b} from 'node-broadlink';
-interface Sp4State<T = boolean> {
-  pwr: T;
-  ntlight: T;
-  indicator: T;
-  ntlbrightness: number;
-  maxworktime: number;
-  childlock: T;
-}
 /**
  * Platform Accessory
  * An instance of this class is created for each accessory your platform registers
@@ -19,17 +11,14 @@ interface Sp4State<T = boolean> {
 export class PlugAccessory implements AccessoryPlugin {
   private readonly service: Service;
   private readonly plug: Sp4b;
-  private state: Sp4State;
   constructor(
     private readonly platform: BroadlinkHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
     private readonly manufacturer: string,
     private readonly model: string,
     private readonly _plug: Sp4b,
-    private readonly _state:Sp4State,
   ) {
     this.plug = _plug;
-    this.state = _state;
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, manufacturer)
@@ -105,7 +94,7 @@ export class PlugAccessory implements AccessoryPlugin {
   * It should return all services which should be added to the accessory.
   */
   async getDevice(): Promise<Sp4b> {
-    const { host } = this.accessory.context.device;
+    const { host } = this.accessory.context;
     const devices = await broadlink.discover();
     const plug = devices.find(d => d.host.address === host.address) as Sp4b;
     return (await plug.auth()) as Sp4b;
