@@ -92,7 +92,8 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               'Restoring existing accessory from cache:',
               existingAccessory.displayName,
             );
-            new PlugAccessory(this, existingAccessory, manufacturer, model, plug, {} as never);
+            const state = await plug.getState();
+            new PlugAccessory(this, existingAccessory, manufacturer, model, plug, state);
           } else {
             this.log.info(
               'registering new accessory:',
@@ -103,7 +104,8 @@ export class BroadlinkHomebridgePlatform implements DynamicPlatformPlugin {
               uuid,
             );
 
-            new PlugAccessory(this, accessory, manufacturer, model, plug, {} as never);
+            const state = await plug.getState();
+            new PlugAccessory(this, accessory, manufacturer, model, plug, state);
 
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
               accessory,
