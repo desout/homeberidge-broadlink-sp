@@ -1,7 +1,7 @@
 {
   "displayName": "Broadlink SP",
   "name": "@desout/homebridge-broadlink-sp",
-  "version": "0.0.3-beta.5",
+  "version": "0.0.3-beta.6",
   "description": "Plugin for homebridge platform for supporting broadlink smart plug",
   "license": "Apache-2.0",
   "repository": {

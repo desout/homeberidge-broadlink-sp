@@ -46,7 +46,7 @@ export class PlugAccessory implements AccessoryPlugin {
    */
   async setOn(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    this.states.on = this.accessory.context.device.setState('pwr', value as boolean);
+    this.states.on = await this.accessory.context.device.setState('pwr', value as boolean);
 
     this.platform.log.debug('Set Characteristic On ->', value);
   }
