@@ -16,7 +16,7 @@ interface Sp4State<T = boolean> {
  * Each accessory may expose multiple services of different service types.
  */
 export class PlugAccessory implements AccessoryPlugin {
-  private service: Service;
+  private readonly service: Service;
   private readonly plug: Sp4b;
   private state: Sp4State;
   constructor(
